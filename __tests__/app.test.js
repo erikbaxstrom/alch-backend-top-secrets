@@ -21,6 +21,15 @@ describe('Test Users Routes', () => {
       email: testUser.email,
     });
   });
+  it('POST /session should log in a user', async () => {
+    const createUserResposne = await request(app)
+      .post('/api/v1/users')
+      .send(testUser);
+    const response = await request(app)
+      .post('/api/v1/users/session')
+      .send(testUser);
+    expect(response.status).toBe(200);
+  });
   afterAll(() => {
     pool.end();
   });
