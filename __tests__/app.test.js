@@ -14,7 +14,7 @@ describe('Test Users Routes', () => {
   };
 
   it('POST /user should create a new user', async () => {
-    const response = await request(app).post('/api/vi/users').send(testUser);
+    const response = await request(app).post('/api/v1/users').send(testUser);
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       id: expect.any(String),
