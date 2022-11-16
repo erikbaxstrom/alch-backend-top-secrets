@@ -1,14 +1,25 @@
 const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
-// const request = require('supertest');
-// const app = require('../lib/app');
+const request = require('supertest');
+const app = require('../lib/app');
 
-describe('backend-express-template routes', () => {
+describe('Test Users Routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
-  it('example test - delete me!', () => {
-    expect(1).toEqual(1);
+
+  const testUser = {
+    email: 'hank@email.com',
+    password: 'hankypanky',
+  };
+
+  it('POST /user should create a new user', async () => {
+    const response = await request(app).post('/api/vi/users').send(testUser);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      id: expect.any(String),
+      email: testUser.email,
+    });
   });
   afterAll(() => {
     pool.end();
