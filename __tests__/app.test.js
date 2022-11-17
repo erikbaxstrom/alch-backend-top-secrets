@@ -22,9 +22,7 @@ describe('Test Users Routes', () => {
     });
   });
   it('POST /session should log in a user', async () => {
-    const createUserResposne = await request(app)
-      .post('/api/v1/users')
-      .send(testUser);
+    await request(app).post('/api/v1/users').send(testUser);
     const response = await request(app)
       .post('/api/v1/users/sessions')
       .send(testUser);
