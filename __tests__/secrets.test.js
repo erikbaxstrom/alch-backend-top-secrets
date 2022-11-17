@@ -2,7 +2,7 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
-const { response } = require('../lib/app');
+// const { response } = require('../lib/app');
 
 describe('Test Users Routes', () => {
   beforeEach(() => {
@@ -14,13 +14,14 @@ describe('Test Users Routes', () => {
     password: 'hankypanky',
   };
 
-  it('', async () => {
+  it('GET /secrets should return a list of secrets for authenticated users', async () => {
     const agent = request.agent(app);
     // create test user
     await request(app).post('/api/v1/users/sessions').send(testUser);
     // sign in test user
     await agent.post('/api/v1/users/sessions').send(testUser);
-    const response = await agent.get('/secrets');
+    // get secrets
+    const response = await agent.get('/api/v1/secrets');
     const expectedResponse = [
       {
         title: 'Favorite Colors',
@@ -36,7 +37,7 @@ describe('Test Users Routes', () => {
       {
         title: 'M&M',
         description:
-          'Bobby was eating Skittles at the basketabll game and he dropped one. I asked if he was going to eat it. He said no thats gross the bleachers are never cleaned. So I picked it up and ate it -- AND IT WAS AN M&M!!!',
+          'Bobby was eating Skittles at the basketball game and he dropped one. I asked if he was going to eat it. He said no thats gross the bleachers are never cleaned. So I picked it up and ate it -- AND IT WAS AN M&M!!!',
         createdAt: expect.any(String),
       },
       {
