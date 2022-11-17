@@ -26,7 +26,7 @@ describe('Test Users Routes', () => {
       .post('/api/v1/users')
       .send(testUser);
     const response = await request(app)
-      .post('/api/v1/users/session')
+      .post('/api/v1/users/sessions')
       .send(testUser);
     expect(response.status).toBe(200);
   });
