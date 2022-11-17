@@ -21,12 +21,23 @@ describe('Test Users Routes', () => {
       email: testUser.email,
     });
   });
-  it('POST /session should log in a user', async () => {
+  it('POST /sessions should log in a user', async () => {
     await request(app).post('/api/v1/users').send(testUser);
     const response = await request(app)
       .post('/api/v1/users/sessions')
       .send(testUser);
     expect(response.status).toBe(200);
+  });
+
+  it('DELETE /sessions should log out a user', async () => {
+    const agent = request.agent(app);
+    // create test user
+    await request(app).post('/api/v1/users/sessions').send(testUser);
+    // sign in test user
+    await agent.post('/api/v1/users/sessions').send(testUser);
+    // sign  out test user
+    const response = await agent.delete('/api/v1/users/sessions');
+    expect(response.status).toBe(204);
   });
   afterAll(() => {
     pool.end();
