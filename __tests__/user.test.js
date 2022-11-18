@@ -21,7 +21,7 @@ describe('Test Users Routes', () => {
       email: testUser.email,
     });
   });
-  it('POST /sessions should log in a user', async () => {
+  it('POST /users/sessions should log in a user', async () => {
     await request(app).post('/api/v1/users').send(testUser);
     const response = await request(app)
       .post('/api/v1/users/sessions')
@@ -29,7 +29,7 @@ describe('Test Users Routes', () => {
     expect(response.status).toBe(200);
   });
 
-  it('DELETE /sessions should log out a user', async () => {
+  it('DELETE /users/sessions should log out a user', async () => {
     const agent = request.agent(app);
     // create test user
     await request(app).post('/api/v1/users/sessions').send(testUser);
