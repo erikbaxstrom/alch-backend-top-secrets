@@ -4,6 +4,15 @@ const request = require('supertest');
 const app = require('../lib/app');
 // const { response } = require('../lib/app');
 
+async function createSignIn(testUser) {
+  const agent = request.agent(app);
+  // create test user
+  await request(app).post('/api/v1/users/sessions').send(testUser);
+  // sign in test user
+  await agent.post('/api/v1/users/sessions').send(testUser);
+  return agent;
+}
+
 describe('Test Users Routes', () => {
   beforeEach(() => {
     return setup(pool);
@@ -15,11 +24,8 @@ describe('Test Users Routes', () => {
   };
 
   it('GET /secrets should return a list of secrets for authenticated users', async () => {
-    const agent = request.agent(app);
-    // create test user
-    await request(app).post('/api/v1/users/sessions').send(testUser);
-    // sign in test user
-    await agent.post('/api/v1/users/sessions').send(testUser);
+    const agent = await createSignIn(testUser);
+
     // get secrets
     const response = await agent.get('/api/v1/secrets');
     const expectedResponse = [
@@ -49,6 +55,16 @@ describe('Test Users Routes', () => {
     ];
     expect(response.status).toBe(200);
     expect(response.body).toEqual(expectedResponse);
+  });
+
+  it.skip('GET /secrets should bounce users who are not logged in', async () => {
+    const agent = request.agent(app);
+    // create test user
+    await request(app).post('/api/v1/users/sessions').send(testUser);
+    // get secrets
+    const response = await agent.get('/api/v1/secrets');
+    console.log('response body::', response.body);
+    expect(response.status).toBe(401);
   });
 
   afterAll(() => {
